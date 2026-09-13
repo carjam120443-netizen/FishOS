@@ -43,6 +43,7 @@ jobs:
           chmod +x scripts/bootstrap.sh
           chmod +x scripts/build-iso.sh
           chmod +x scripts/install-branding.sh
+          chmod +x scripts/install-fetch-branding.sh
           chmod +x scripts/run-xfce.sh
 
       - name: Build fishOS ISO

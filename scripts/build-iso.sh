@@ -8,7 +8,7 @@ ISO_NAME="fishOS-live.iso"
 ISO_PATH="${DIST_DIR}/${ISO_NAME}"
 BRAND_DIR="${ROOT_DIR}/branding/fishOS"
 
-mkdir -p "${DIST_DIR}" "${ISO_ROOT}/boot/grub" "${ISO_ROOT}/etc" "${ISO_ROOT}/usr/share/fishOS"
+mkdir -p "${DIST_DIR}" "${ISO_ROOT}/boot/grub" "${ISO_ROOT}/casper" "${ISO_ROOT}/etc" "${ISO_ROOT}/usr/share/fishOS"
 
 cp "${BRAND_DIR}/os-release" "${ISO_ROOT}/etc/os-release"
 cp "${BRAND_DIR}/issue.net" "${ISO_ROOT}/etc/issue.net"
@@ -19,24 +19,33 @@ cat > "${ISO_ROOT}/boot/grub/grub.cfg" <<EOF
 set default=0
 set timeout=5
 
-menuentry "fishOS Live" {
+menuentry "fishOS Live (GRUB)" {
     linux /casper/vmlinuz boot=casper quiet splash
     initrd /casper/initrd
 }
 EOF
 
-if ! command -v xorriso >/dev/null 2>&1; then
-    echo "xorriso is required to build an ISO image. Install it with:"
-    echo "sudo apt-get update && sudo apt-get install -y xorriso"
+# Add placeholder kernel/initrd files for a VirtualBox-safe boot menu layout.
+# In a full live ISO build these files would be replaced by a real Ubuntu live kernel and initrd.
+mkdir -p "${ISO_ROOT}/casper"
+: > "${ISO_ROOT}/casper/vmlinuz"
+: > "${ISO_ROOT}/casper/initrd"
+
+if command -v grub-mkrescue >/dev/null 2>&1; then
+    rm -f "${ISO_PATH}"
+    grub-mkrescue -o "${ISO_PATH}" -V "fishOS" "${ISO_ROOT}" >/dev/null
+elif command -v xorriso >/dev/null 2>&1; then
+    echo "grub-mkrescue not found; using xorriso fallback"
+    rm -f "${ISO_PATH}"
+    xorriso -as mkisofs \
+        -iso-level 3 \
+        -full-iso9660-filenames \
+        -volid "fishOS" \
+        -output "${ISO_PATH}" \
+        "${ISO_ROOT}"
+else
+    echo "Neither grub-mkrescue nor xorriso is installed. Install grub-common and xorriso to build the ISO."
     exit 1
 fi
-
-rm -f "${ISO_PATH}"
-xorriso -as mkisofs \
-    -iso-level 3 \
-    -full-iso9660-filenames \
-    -volid "fishOS" \
-    -output "${ISO_PATH}" \
-    "${ISO_ROOT}"
 
 echo "Created ${ISO_PATH}"
