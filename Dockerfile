@@ -24,6 +24,7 @@ RUN apt-get update \
         lightdm \
         nano \
         net-tools \
+        opendoas \
         procps \
         sudo \
         tzdata \
@@ -41,6 +42,9 @@ RUN apt-get update \
 # locale setup for image container
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ >/etc/timezone
+
+# keep a doas-compatible command workspace in the image
+RUN mkdir -p /etc/doas.d && chmod 755 /etc/doas.d
 
 COPY scripts/bootstrap.sh /usr/local/bin/bootstrap.sh
 COPY scripts/build-iso.sh /usr/local/bin/build-iso.sh

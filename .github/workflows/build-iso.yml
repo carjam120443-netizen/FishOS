@@ -34,7 +34,8 @@ jobs:
             grub-common \
             genisoimage \
             live-build \
-            sudo
+            sudo \
+            opendoas
           sudo apt-get install -y --only-upgrade sudo
 
       - name: Make helper scripts executable

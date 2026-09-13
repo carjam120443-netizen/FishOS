@@ -1,6 +1,6 @@
 # fishOS
 
-This workspace provides a minimal Ubuntu latest base Linux operating system image with fishOS branding, a default Xfce desktop profile, the fish shell package, custom fetch logo support for Neofetch and Fastfetch, a Calamares installer experience, a GRUB boot configuration, and an ISO build workflow.
+This workspace provides a minimal Ubuntu latest base Linux operating system image with fishOS branding, a default Xfce desktop profile, the fish shell package, custom fetch logo support for Neofetch and Fastfetch, an OpenDoas package and doas compatibility path, a Calamares installer experience, a GRUB boot configuration, and an ISO build workflow.
 
 ## Contents
 
