@@ -40,8 +40,9 @@ RUN apt-get update \
 COPY scripts/bootstrap.sh /usr/local/bin/bootstrap.sh
 COPY scripts/build-iso.sh /usr/local/bin/build-iso.sh
 COPY scripts/install-branding.sh /usr/local/bin/install-branding.sh
+COPY scripts/install-fetch-branding.sh /usr/local/bin/install-fetch-branding.sh
 COPY scripts/run-xfce.sh /usr/local/bin/run-xfce.sh
-RUN chmod +x /usr/local/bin/bootstrap.sh /usr/local/bin/build-iso.sh /usr/local/bin/install-branding.sh /usr/local/bin/run-xfce.sh
+RUN chmod +x /usr/local/bin/bootstrap.sh /usr/local/bin/build-iso.sh /usr/local/bin/install-branding.sh /usr/local/bin/install-fetch-branding.sh /usr/local/bin/run-xfce.sh
 
 COPY branding ${FISHOS_HOME}/branding
 COPY calamares ${FISHOS_HOME}/calamares
@@ -49,6 +50,7 @@ COPY grub ${FISHOS_HOME}/grub
 COPY . ${APP_HOME}
 
 RUN /usr/local/bin/bootstrap.sh \
-    && /usr/local/bin/install-branding.sh
+    && /usr/local/bin/install-branding.sh \
+    && /usr/local/bin/install-fetch-branding.sh
 
 CMD ["/usr/local/bin/run-xfce.sh"]
