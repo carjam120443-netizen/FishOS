@@ -29,41 +29,24 @@ EOF
 VMLINUZ="$(find /boot -maxdepth 1 -type f -name 'vmlinuz*' ! -name '*rescue*' 2>/dev/null | sort | head -n 1 || true)"
 INITRD="$(find /boot -maxdepth 1 -type f \( -name 'initrd.img*' -o -name 'initrd*' \) 2>/dev/null | sort | head -n 1 || true)"
 
-SUDO=""
-if command -v sudo >/dev/null 2>&1; then
-    SUDO="sudo"
-fi
-
 if [[ -n "${VMLINUZ}" && -s "${VMLINUZ}" ]]; then
-    if [[ -n "${SUDO}" ]]; then
-        ${SUDO} cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
-    else
-        cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
-    fi
-    chmod 644 "${ISO_ROOT}/casper/vmlinuz"
+    cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
 else
     echo "No Ubuntu kernel file found in /boot. Install linux-image-generic or a matching kernel package before building the ISO."
     exit 1
 fi
 
 if [[ -n "${INITRD}" && -s "${INITRD}" ]]; then
-    if [[ -n "${SUDO}" ]]; then
-        ${SUDO} cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
-    else
-        cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
-    fi
-    chmod 644 "${ISO_ROOT}/casper/initrd"
+    cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
 else
     echo "No Ubuntu initrd file found in /boot. Install linux-image-generic or a matching initrd package before building the ISO."
     exit 1
 fi
 
-if command -v grub-mkrescue >/dev/null 2>&1; then
-    echo "grub-mkrescue found; creating ISO with GRUB bootloader metadata"
-    rm -f "${ISO_PATH}"
-    grub-mkrescue -o "${ISO_PATH}" -V "fishOS" "${ISO_ROOT}" >/dev/null
-elif command -v xorriso >/dev/null 2>&1; then
-    echo "grub-mkrescue not found; using xorriso fallback"
+chmod 644 "${ISO_ROOT}/casper/vmlinuz" "${ISO_ROOT}/casper/initrd"
+
+if command -v xorriso >/dev/null 2>&1; then
+    echo "xorriso found; building ISO directly"
     rm -f "${ISO_PATH}"
     xorriso -as mkisofs \
         -iso-level 3 \
@@ -71,8 +54,12 @@ elif command -v xorriso >/dev/null 2>&1; then
         -volid "fishOS" \
         -output "${ISO_PATH}" \
         "${ISO_ROOT}"
+elif command -v grub-mkrescue >/dev/null 2>&1; then
+    echo "xorriso not found; using grub-mkrescue fallback"
+    rm -f "${ISO_PATH}"
+    grub-mkrescue -o "${ISO_PATH}" -V "fishOS" "${ISO_ROOT}" >/dev/null
 else
-    echo "Neither grub-mkrescue nor xorriso is installed. Install grub-common and xorriso to build the ISO."
+    echo "Neither xorriso nor grub-mkrescue is installed. Install xorriso and grub-common to build the ISO."
     exit 1
 fi
 
