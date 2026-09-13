@@ -35,14 +35,24 @@ if command -v sudo >/dev/null 2>&1; then
 fi
 
 if [[ -n "${VMLINUZ}" && -s "${VMLINUZ}" ]]; then
-    ${SUDO} cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
+    if [[ -n "${SUDO}" ]]; then
+        ${SUDO} cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
+    else
+        cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
+    fi
+    chmod 644 "${ISO_ROOT}/casper/vmlinuz"
 else
     echo "No Ubuntu kernel file found in /boot. Install linux-image-generic or a matching kernel package before building the ISO."
     exit 1
 fi
 
 if [[ -n "${INITRD}" && -s "${INITRD}" ]]; then
-    ${SUDO} cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
+    if [[ -n "${SUDO}" ]]; then
+        ${SUDO} cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
+    else
+        cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
+    fi
+    chmod 644 "${ISO_ROOT}/casper/initrd"
 else
     echo "No Ubuntu initrd file found in /boot. Install linux-image-generic or a matching initrd package before building the ISO."
     exit 1
