@@ -22,6 +22,7 @@ jobs:
             bash \
             ca-certificates \
             curl \
+            fish \
             git \
             jq \
             less \

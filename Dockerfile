@@ -16,6 +16,7 @@ RUN apt-get update \
         ca-certificates \
         curl \
         dbus-x11 \
+        fish \
         git \
         jq \
         less \
