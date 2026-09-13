@@ -1,0 +1,51 @@
+name: fishOS ISO Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install base build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            bash \
+            ca-certificates \
+            curl \
+            git \
+            jq \
+            less \
+            xorriso \
+            wget \
+            squashfs-tools \
+            grub-pc-bin \
+            grub-common \
+            genisoimage \
+            live-build
+
+      - name: Make helper scripts executable
+        run: |
+          chmod +x scripts/bootstrap.sh
+          chmod +x scripts/build-iso.sh
+          chmod +x scripts/install-branding.sh
+          chmod +x scripts/run-xfce.sh
+
+      - name: Build fishOS ISO
+        run: |
+          bash scripts/build-iso.sh
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fishOS-live-iso
+          path: dist/fishOS-live.iso
