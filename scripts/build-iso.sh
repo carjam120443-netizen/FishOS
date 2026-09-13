@@ -25,8 +25,21 @@ menuentry "fishOS Live (GRUB)" {
 }
 EOF
 
-if [[ ! -s "${ISO_ROOT}/casper/vmlinuz" || ! -s "${ISO_ROOT}/casper/initrd" ]]; then
-    echo "Missing real casper/vmlinuz or casper/initrd payload. This repository cannot boot until live-build places a genuine kernel and initrd in the ISO root."
+# Stage the real kernel and initrd files from the runner's installed Ubuntu kernel package.
+VMLINUZ="$(find /boot -maxdepth 1 -type f -name 'vmlinuz*' ! -name '*rescue*' 2>/dev/null | sort | head -n 1 || true)"
+INITRD="$(find /boot -maxdepth 1 -type f \( -name 'initrd.img*' -o -name 'initrd*' \) 2>/dev/null | sort | head -n 1 || true)"
+
+if [[ -n "${VMLINUZ}" && -s "${VMLINUZ}" ]]; then
+    cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
+else
+    echo "No Ubuntu kernel file found in /boot. Install linux-image-generic or a matching kernel package before building the ISO."
+    exit 1
+fi
+
+if [[ -n "${INITRD}" && -s "${INITRD}" ]]; then
+    cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
+else
+    echo "No Ubuntu initrd file found in /boot. Install linux-image-generic or a matching initrd package before building the ISO."
     exit 1
 fi
 
