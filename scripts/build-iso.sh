@@ -25,10 +25,10 @@ menuentry "fishOS Live (GRUB)" {
 }
 EOF
 
-# Create the placeholder boot payload directory the GRUB menu is expecting.
-mkdir -p "${ISO_ROOT}/casper"
-: > "${ISO_ROOT}/casper/vmlinuz"
-: > "${ISO_ROOT}/casper/initrd"
+if [[ ! -s "${ISO_ROOT}/casper/vmlinuz" || ! -s "${ISO_ROOT}/casper/initrd" ]]; then
+    echo "Missing real casper/vmlinuz or casper/initrd payload. This repository cannot boot until live-build places a genuine kernel and initrd in the ISO root."
+    exit 1
+fi
 
 if command -v grub-mkrescue >/dev/null 2>&1; then
     echo "grub-mkrescue found; creating ISO with GRUB bootloader metadata"
