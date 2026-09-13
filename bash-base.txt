@@ -1,0 +1,16 @@
+# fishOS Bash Base Files
+
+This file records the Bash compatibility expectations for the fishOS workspace.
+
+Required commands for a Linux build host:
+- bash
+- xorriso
+- calamares
+- wget / curl
+- docker
+
+Fallback strategy if bash is missing:
+- Use a real Linux Ubuntu shell or Git Bash installed under Program Files.
+- Use the PowerShell wrapper script `scripts/fishOS-shell-wrapper.ps1` to locate a valid Bash path.
+
+The scripts are written for Bash and should be run from a Bash-compatible environment.

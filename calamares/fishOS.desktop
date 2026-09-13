@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Install fishOS
+Comment=Launch Calamares installation
+Exec=/usr/bin/calamares
+Icon=/usr/share/fishOS/fishOS.svg
+Terminal=false
+Categories=System;Settings;
+StartupNotify=true

@@ -1,0 +1,25 @@
+componentName: fishOS
+welcomeStyleCalamares: true
+windowExpanding: normal
+windowSize: 1200, 700
+sidebar: top
+strings:
+    productName: fishOS
+    shortProductName: fishOS
+    version: 1.0
+    versionedName: fishOS 1.0
+    shortVersionedName: fishOS 1.0
+    release: Ubuntu latest Xfce
+    productUrl: https://example.invalid/fishOS
+    supportUrl: https://example.invalid/fishOS/support
+    knownIssuesUrl: https://example.invalid/fishOS/issues
+images:
+    productLogo: /usr/share/fishOS/fishOS.svg
+    productIcon: /usr/share/fishOS/fishOS.svg
+    productWelcome: /usr/share/fishOS/fishOS.svg
+style:
+    sidebarBackground: "#07191f"
+    sidebarText: "#eafbe8"
+    sidebarTextSelect: "#07251b"
+    sidebarTextHighlight: "#58f29a"
+    sidebarBackgroundSelect: "#8ee3a4"

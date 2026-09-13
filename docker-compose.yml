@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  fishos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fishOS
+    tty: true
+    stdin_open: true
+    environment:
+      FISHOS_DESKTOP: xfce
+      DISPLAY: ${DISPLAY:-:0}
+    working_dir: /opt/base-linux
+    volumes:
+      - .:/opt/base-linux
+      - ./dist:/opt/base-linux/dist
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    command: /usr/bin/startxfce4

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#07191f"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#8ee3a4" stroke-width="8"/>
+  <path d="M170 310 C185 225, 208 178, 256 170 C302 176, 330 215, 332 270 C300 240, 258 254, 244 284 C225 255, 207 251, 186 278 C178 276, 174 277, 170 310 Z" fill="#8ee3a4" opacity="0.9"/>
+  <path d="M150 322 C190 340, 220 340, 256 320 C292 340, 330 340, 362 322" fill="none" stroke="#d8ffe7" stroke-width="10"/>
+  <text x="256" y="420" font-family="DejaVu Sans, Arial" font-size="44" fill="#d8ffe7" text-anchor="middle">fishOS</text>
+</svg>
