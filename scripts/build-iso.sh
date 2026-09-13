@@ -29,15 +29,20 @@ EOF
 VMLINUZ="$(find /boot -maxdepth 1 -type f -name 'vmlinuz*' ! -name '*rescue*' 2>/dev/null | sort | head -n 1 || true)"
 INITRD="$(find /boot -maxdepth 1 -type f \( -name 'initrd.img*' -o -name 'initrd*' \) 2>/dev/null | sort | head -n 1 || true)"
 
+SUDO=""
+if command -v sudo >/dev/null 2>&1; then
+    SUDO="sudo"
+fi
+
 if [[ -n "${VMLINUZ}" && -s "${VMLINUZ}" ]]; then
-    cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
+    ${SUDO} cp "${VMLINUZ}" "${ISO_ROOT}/casper/vmlinuz"
 else
     echo "No Ubuntu kernel file found in /boot. Install linux-image-generic or a matching kernel package before building the ISO."
     exit 1
 fi
 
 if [[ -n "${INITRD}" && -s "${INITRD}" ]]; then
-    cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
+    ${SUDO} cp "${INITRD}" "${ISO_ROOT}/casper/initrd"
 else
     echo "No Ubuntu initrd file found in /boot. Install linux-image-generic or a matching initrd package before building the ISO."
     exit 1
