@@ -28,6 +28,7 @@ jobs:
             jq \
             less \
             mtools \
+            linux-image-generic \
             xorriso \
             wget \
             squashfs-tools \

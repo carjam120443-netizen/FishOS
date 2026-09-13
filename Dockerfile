@@ -22,6 +22,7 @@ RUN apt-get update \
         jq \
         less \
         lightdm \
+        linux-image-generic \
         mtools \
         nano \
         net-tools \
