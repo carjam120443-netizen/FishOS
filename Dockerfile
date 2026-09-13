@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 WORKDIR ${APP_HOME}
 
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
         bash \
         ca-certificates \
@@ -33,9 +34,13 @@ RUN apt-get update \
         xorriso \
         xterm \
         calamares \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ >/etc/timezone \
+    && apt-get install -y --only-upgrade sudo \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# locale setup for image container
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ >/etc/timezone
 
 COPY scripts/bootstrap.sh /usr/local/bin/bootstrap.sh
 COPY scripts/build-iso.sh /usr/local/bin/build-iso.sh
