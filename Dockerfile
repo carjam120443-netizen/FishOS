@@ -22,6 +22,7 @@ RUN apt-get update \
         jq \
         less \
         lightdm \
+        mtools \
         nano \
         net-tools \
         opendoas \

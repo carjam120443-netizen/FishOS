@@ -27,6 +27,7 @@ jobs:
             git \
             jq \
             less \
+            mtools \
             xorriso \
             wget \
             squashfs-tools \

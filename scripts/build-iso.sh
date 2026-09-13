@@ -31,11 +31,8 @@ mkdir -p "${ISO_ROOT}/casper"
 : > "${ISO_ROOT}/casper/vmlinuz"
 : > "${ISO_ROOT}/casper/initrd"
 
-if command -v grub-mkrescue >/dev/null 2>&1; then
-    rm -f "${ISO_PATH}"
-    grub-mkrescue -o "${ISO_PATH}" -V "fishOS" "${ISO_ROOT}" >/dev/null
-elif command -v xorriso >/dev/null 2>&1; then
-    echo "grub-mkrescue not found; using xorriso fallback"
+if command -v xorriso >/dev/null 2>&1; then
+    echo "xorriso found; building ISO directly"
     rm -f "${ISO_PATH}"
     xorriso -as mkisofs \
         -iso-level 3 \
@@ -43,8 +40,12 @@ elif command -v xorriso >/dev/null 2>&1; then
         -volid "fishOS" \
         -output "${ISO_PATH}" \
         "${ISO_ROOT}"
+elif command -v grub-mkrescue >/dev/null 2>&1; then
+    echo "xorriso not found; using grub-mkrescue fallback"
+    rm -f "${ISO_PATH}"
+    grub-mkrescue -o "${ISO_PATH}" -V "fishOS" "${ISO_ROOT}" >/dev/null
 else
-    echo "Neither grub-mkrescue nor xorriso is installed. Install grub-common and xorriso to build the ISO."
+    echo "Neither xorriso nor grub-mkrescue is installed. Install xorriso and grub-common to build the ISO."
     exit 1
 fi
 
